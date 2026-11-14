@@ -105,7 +105,7 @@ Automated the application's major functional test cases using Python, Selenium W
 Clone the repository:
 
 ```bash
-
+https://github.com/Subhakarpillai/ECOMMERCE-TESTING-PROJECT.git
 ```
 
 Navigate to the automation folder:
