@@ -1,162 +1,101 @@
-# E-Commerce Website Testing Project
-### Manual Testing | Selenium Automation | Python | Pytest
+# SauceDemo Automation Testing Project
 
-## 1. Project Overview
+## Project Overview
+This project focuses on automating the SauceDemo e-commerce web application using Selenium WebDriver with Python and Pytest.
 
-A practical Software Quality Assurance project focused on testing the SauceDemo e-commerce web application.
+The framework follows the Page Object Model (POM) design pattern to improve code reusability, maintainability, and readability.
 
-This project covers both Manual Testing and Automation Testing to validate the application's core functionalities, identify potential defects, and verify expected application behavior.
+## Tools & Technologies
+- Python
+- Selenium WebDriver
+- Pytest
+- Pytest HTML
+- Visual Studio Code
+- Git & GitHub
 
-**Application Under Test:** https://www.saucedemo.com/
+## Project Structure
 
-## 2. Project Objectives
-
-- Understand real-world software testing workflows.
-- Design and execute detailed test scenarios and test cases.
-- Validate functional requirements of an e-commerce application.
-- Automate test cases using Selenium WebDriver and Pytest.
-- Maintain test documentation and bug reports.
-- Use GitHub for project version control and documentation.
-
-## 3. Tools and Technologies
-
-| Tool / Technology | Purpose |
-|---|---|
-| Python | Programming language |
-| Selenium WebDriver | Browser automation |
-| Pytest | Test execution and framework |
-| VS Code | Development environment |
-| Microsoft Excel | Test documentation |
-| Git & GitHub | Version control and project hosting |
-
-## 4. Application Modules Tested
-
-**Login Module**
-- Valid login credentials
-- Invalid username and password
-- Invalid username
-- Invalid password
-
-**Products Module**
-- Verify product listing
-- Sort products by price (low to high)
-- Sort products by price (high to low)
-- Verify product details
-
-**Shopping Cart Module**
-- Add a single product
-- Add multiple products
-- Remove a product
-- Verify cart contents
-
-**Checkout Module**
-- Checkout with valid customer details
-- Validate mandatory fields
-- Verify successful order placement
-
-## 5. Manual Testing
-
-Manual testing was performed to validate the application's functional behavior.
-
-Documentation maintained in `Test-Documentation.xlsx`:
-
-- Test Scenarios
-- Detailed Test Cases
-- Test Execution Results
-- Bug Reports
-
-## 6. Automation Testing
-
-Automated the application's major functional test cases using Python, Selenium WebDriver, and Pytest.
-
-**Automation Framework Components**
-
-- `conftest.py` – Shared browser fixture and setup/teardown.
-- `pytest.ini` – Pytest configuration.
-- `test_login.py` – Login test cases.
-- `test_products.py` – Product test cases.
-- `test_cart.py` – Shopping cart test cases.
-- `test_checkout.py` – Checkout test cases.
-- `selenium_basic.py` – Standalone Selenium practice script.
-
-**Automation Approach**
-
-1. Launch Chrome browser using Selenium WebDriver.
-2. Navigate to the SauceDemo application.
-3. Perform user interactions using Selenium locators.
-4. Use explicit waits to handle dynamic page elements.
-5. Validate actual results using Python assertions.
-6. Execute tests using Pytest.
-
-## 7. Test Execution Results
-
-| Module | Total Test Cases | Passed |
-|---|---:|---:|
-| Login | 4 | 4 |
-| Products | 4 | 4 |
-| Shopping Cart | 4 | 4 |
-| Checkout | 3 | 3 |
-| **Total** | **15** | **15** |
-
-**Execution Status:** 15 Passed, 0 Failed.
-
-## 8. How to Run the Automation Tests
-
-Clone the repository:
-
-```bash
-https://github.com/Subhakarpillai/ECOMMERCE-TESTING-PROJECT.git
+```text
+Automation-Testing/
+│
+├── pages/
+│   ├── login_page.py
+│   ├── products_page.py
+│   ├── cart_page.py
+│   └── checkout_page.py
+│
+├── tests/
+│   ├── test_login.py
+│   ├── test_products.py
+│   ├── test_cart.py
+│   └── test_checkout.py
+│
+├── reports/
+│   └── report.html
+│
+├── conftest.py
+├── pytest.ini
+└── requirements.txt
 ```
 
-Navigate to the automation folder:
+## Automated Test Modules
 
-```bash
-cd Automation-Testing
-```
+| Module | Test Cases |
+|---|---:|
+| Login | 4 |
+| Products | 4 |
+| Cart | 4 |
+| Checkout | 3 |
+| **Total** | **15** |
 
-Install dependencies:
+## Framework Design
+
+The project uses the Page Object Model (POM).
+
+- Page classes contain web element locators and reusable methods.
+- Test files contain test scenarios and assertions.
+- `conftest.py` manages the WebDriver fixture.
+- `pytest.ini` contains Pytest configuration.
+- HTML reports provide test execution results.
+
+## Installation
+
+Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run all test cases:
+## Test Execution
+
+Run all automated test cases:
 
 ```bash
 pytest -v
 ```
 
-Run individual test modules:
+Generate an HTML execution report:
 
 ```bash
-pytest tests/test_login.py -v
-pytest tests/test_products.py -v
-pytest tests/test_cart.py -v
-pytest tests/test_checkout.py -v
+pytest -v --html=reports/report.html --self-contained-html
 ```
 
-## 9. Skills Demonstrated
+## Test Execution Results
 
-- Manual Test Case Design
-- Functional Testing
-- Test Execution
-- Bug Reporting
-- Selenium WebDriver
-- Python Programming
-- Pytest Fixtures
-- Explicit Waits
-- Assertions
-- GitHub Project Management
+- Total Test Cases: 15
+- Passed: 15
+- Failed: 0
+- Skipped: 0
 
-## 10. Future Enhancements
+## Future Enhancements
 
-- Implement Page Object Model (POM).
-- Generate automated HTML test reports.
-- Integrate test execution with GitHub Actions.
-- Expand automation coverage with additional test scenarios.
+- Implement data-driven testing.
+- Add screenshots for failed test cases.
+- Integrate automation tests with Jenkins.
+- Implement cross-browser testing.
 
-## 11. Project Outcome
+## Author
 
-Successfully designed and executed 15 manual and automated test cases covering the major functionalities of an e-commerce application.
+Subhakar M
 
-This project provided practical experience in test documentation, functional validation, browser automation, and test execution using Pytest.
+Software Testing | Selenium Automation | Python | Pytest
