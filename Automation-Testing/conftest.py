@@ -24,4 +24,3 @@ def driver():
     yield browser
 
     browser.quit()
-

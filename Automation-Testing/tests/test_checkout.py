@@ -9,6 +9,8 @@ from selenium.webdriver.common.by import By
 
 
 def login_and_add_product(driver):
+    wait = WebDriverWait(driver, 15)
+
     driver.get("https://www.saucedemo.com/")
 
     login = LoginPage(driver)
@@ -16,23 +18,49 @@ def login_and_add_product(driver):
     login.enter_password("secret_sauce")
     login.click_login()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item"))
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "inventory_item")
+        )
     )
 
     cart = CartPage(driver)
     cart.add_backpack()
+
+    # Wait until product is added
+    wait.until(
+        EC.text_to_be_present_in_element(
+            (By.CLASS_NAME, "shopping_cart_badge"), "1"
+        )
+    )
+
     cart.open_cart()
+
+    # Wait until cart page is loaded
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "cart_item")
+        )
+    )
+
+    wait.until(
+        EC.element_to_be_clickable((By.ID, "checkout"))
+    )
 
 
 # TC13 - Checkout with Valid Customer Details
 
 def test_checkout_valid_details(driver):
+    wait = WebDriverWait(driver, 15)
 
     login_and_add_product(driver)
 
     checkout = CheckoutPage(driver)
     checkout.click_checkout()
+
+    wait.until(
+        EC.visibility_of_element_located((By.ID, "first-name"))
+    )
 
     checkout.enter_first_name("Subhakar")
     checkout.enter_last_name("M")
@@ -40,22 +68,38 @@ def test_checkout_valid_details(driver):
 
     checkout.click_continue()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "summary_info"))
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "summary_info")
+        )
     )
 
-    assert driver.find_element(By.CLASS_NAME, "summary_info").is_displayed()
+    assert driver.find_element(
+        By.CLASS_NAME, "summary_info"
+    ).is_displayed()
 
 
 # TC14 - Checkout with Empty Mandatory Fields
 
 def test_checkout_empty_fields(driver):
+    wait = WebDriverWait(driver, 15)
 
     login_and_add_product(driver)
 
     checkout = CheckoutPage(driver)
     checkout.click_checkout()
+
+    wait.until(
+        EC.visibility_of_element_located((By.ID, "first-name"))
+    )
+
     checkout.click_continue()
+
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "error-message-container")
+        )
+    )
 
     error_message = checkout.get_error_message()
 
@@ -65,11 +109,16 @@ def test_checkout_empty_fields(driver):
 # TC15 - Verify Successful Order
 
 def test_successful_order(driver):
+    wait = WebDriverWait(driver, 15)
 
     login_and_add_product(driver)
 
     checkout = CheckoutPage(driver)
     checkout.click_checkout()
+
+    wait.until(
+        EC.visibility_of_element_located((By.ID, "first-name"))
+    )
 
     checkout.enter_first_name("Subhakar")
     checkout.enter_last_name("M")
@@ -77,14 +126,16 @@ def test_successful_order(driver):
 
     checkout.click_continue()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.ID, "finish"))
+    wait.until(
+        EC.element_to_be_clickable((By.ID, "finish"))
     )
 
     checkout.click_finish()
 
-    success_message = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "complete-header"))
+    success_message = wait.until(
+        EC.visibility_of_element_located(
+            (By.CLASS_NAME, "complete-header")
+        )
     )
 
     assert success_message.text == "Thank you for your order!"
