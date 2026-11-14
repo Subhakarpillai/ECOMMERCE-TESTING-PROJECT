@@ -1,32 +1,44 @@
-from selenium.webdriver.common.by import By
+
+from pages.login_page import LoginPage
+from pages.cart_page import CartPage
+from pages.checkout_page import CheckoutPage
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+
+def login_and_add_product(driver):
+    driver.get("https://www.saucedemo.com/")
+
+    login = LoginPage(driver)
+    login.enter_username("standard_user")
+    login.enter_password("secret_sauce")
+    login.click_login()
+
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item"))
+    )
+
+    cart = CartPage(driver)
+    cart.add_backpack()
+    cart.open_cart()
 
 
 # TC13 - Checkout with Valid Customer Details
 
 def test_checkout_valid_details(driver):
 
-    driver.get("https://www.saucedemo.com/")
+    login_and_add_product(driver)
 
-    driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
-    driver.find_element(By.ID, "login-button").click()
+    checkout = CheckoutPage(driver)
+    checkout.click_checkout()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item"))
-    )
+    checkout.enter_first_name("Subhakar")
+    checkout.enter_last_name("M")
+    checkout.enter_postal_code("625001")
 
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
-    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-
-    driver.find_element(By.ID, "checkout").click()
-
-    driver.find_element(By.ID, "first-name").send_keys("Subhakar")
-    driver.find_element(By.ID, "last-name").send_keys("M")
-    driver.find_element(By.ID, "postal-code").send_keys("625001")
-
-    driver.find_element(By.ID, "continue").click()
+    checkout.click_continue()
 
     WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.CLASS_NAME, "summary_info"))
@@ -34,61 +46,42 @@ def test_checkout_valid_details(driver):
 
     assert driver.find_element(By.CLASS_NAME, "summary_info").is_displayed()
 
-    # TC14 - Checkout with Empty Mandatory Fields
+
+# TC14 - Checkout with Empty Mandatory Fields
 
 def test_checkout_empty_fields(driver):
 
-    driver.get("https://www.saucedemo.com/")
+    login_and_add_product(driver)
 
-    driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
-    driver.find_element(By.ID, "login-button").click()
+    checkout = CheckoutPage(driver)
+    checkout.click_checkout()
+    checkout.click_continue()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item"))
-    )
-
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
-    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-    driver.find_element(By.ID, "checkout").click()
-
-    driver.find_element(By.ID, "continue").click()
-
-    error_message = driver.find_element(
-        By.CLASS_NAME, "error-message-container"
-    ).text
+    error_message = checkout.get_error_message()
 
     assert "First Name is required" in error_message
 
-    # TC15 - Verify Successful Order
+
+# TC15 - Verify Successful Order
 
 def test_successful_order(driver):
 
-    driver.get("https://www.saucedemo.com/")
+    login_and_add_product(driver)
 
-    driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
-    driver.find_element(By.ID, "login-button").click()
+    checkout = CheckoutPage(driver)
+    checkout.click_checkout()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item"))
-    )
+    checkout.enter_first_name("Subhakar")
+    checkout.enter_last_name("M")
+    checkout.enter_postal_code("625001")
 
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
-    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-    driver.find_element(By.ID, "checkout").click()
-
-    driver.find_element(By.ID, "first-name").send_keys("Subhakar")
-    driver.find_element(By.ID, "last-name").send_keys("M")
-    driver.find_element(By.ID, "postal-code").send_keys("625001")
-
-    driver.find_element(By.ID, "continue").click()
+    checkout.click_continue()
 
     WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.ID, "finish"))
     )
 
-    driver.find_element(By.ID, "finish").click()
+    checkout.click_finish()
 
     success_message = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.CLASS_NAME, "complete-header"))
